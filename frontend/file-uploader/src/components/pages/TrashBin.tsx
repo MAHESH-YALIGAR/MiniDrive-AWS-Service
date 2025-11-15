@@ -38,20 +38,20 @@ const TrashBin: React.FC = () => {
   // };
 
   const getDisplayName = (filename: string) => {
-  // 1️⃣ If it is a folder file encoded with "~"
-  if (filename.includes("~")) {
-    return filename.split("~").pop() || filename;
-  }
+    // 1️⃣ If it is a folder file encoded with "~"
+    if (filename.includes("~")) {
+      return filename.split("~").pop() || filename;
+    }
 
-  // 2️⃣ If it is a normal uuid-prefixed file
-  const uuidMatch = filename.match(/^[a-f0-9\-]+-(.+)$/);
-  if (uuidMatch) {
-    return uuidMatch[1];
-  }
+    // 2️⃣ If it is a normal uuid-prefixed file
+    const uuidMatch = filename.match(/^[a-f0-9\-]+-(.+)$/);
+    if (uuidMatch) {
+      return uuidMatch[1];
+    }
 
-  // 3️⃣ Default - return the same name
-  return filename;
-};
+    // 3️⃣ Default - return the same name
+    return filename;
+  };
 
 
   // Fetch trashed files
@@ -81,7 +81,7 @@ const TrashBin: React.FC = () => {
   // ✅ FIXED: Restore a file
   const handleRestore = async (file: TrashFile) => {
     const fileKey = file.key;
-    
+
     console.log("🔍 Restore debug:", { file, fileKey });
 
     if (!fileKey) {
@@ -92,7 +92,7 @@ const TrashBin: React.FC = () => {
 
     try {
       const token = localStorage.getItem("token");
-      
+
       if (!token) {
         addToast("error", "No authentication token found");
         return;
@@ -120,7 +120,7 @@ const TrashBin: React.FC = () => {
       // Remove from trash list
       setTrashFiles(trashFiles.filter((f) => f.key !== fileKey));
       addToast("success", `"${getDisplayName(file.name)}" restored successfully!`);
-      
+
     } catch (err) {
       console.error("❌ Restore error:", err);
       addToast("error", `Failed to restore: ${err instanceof Error ? err.message : "Unknown error"}`);
@@ -223,7 +223,7 @@ const TrashBin: React.FC = () => {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent flex items-center gap-3">
             <Trash2 className="text-red-600" /> Trash Bin
           </h1>
-          <p className="text-gray-600 mt-2">Files here will be permanently deleted after 30 days</p>
+          <p className="text-gray-600 mt-2">You can restore or permanently delete any file, including videos and photos.</p>
         </div>
 
         {/* Toast Notifications */}
@@ -231,11 +231,10 @@ const TrashBin: React.FC = () => {
           {toasts.map((toast) => (
             <div
               key={toast.id}
-              className={`flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg ${
-                toast.type === "success"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-              }`}
+              className={`flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg ${toast.type === "success"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+                }`}
             >
               {toast.type === "success" ? (
                 <CheckCircle size={20} />
@@ -304,9 +303,8 @@ const TrashBin: React.FC = () => {
                       Deleted: {new Date(file.lastModified).toLocaleString()}
                     </p>
                     <p
-                      className={`text-xs mt-2 font-medium ${
-                        daysLeft > 0 ? "text-red-600" : "text-red-800"
-                      }`}
+                      className={`text-xs mt-2 font-medium ${daysLeft > 0 ? "text-red-600" : "text-red-800"
+                        }`}
                     >
                       {daysLeft > 0
                         ? `🗓️ ${daysLeft} day${daysLeft > 1 ? "s" : ""} left`

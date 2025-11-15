@@ -1,104 +1,245 @@
-Welcome to MiniDrive, your personal cloud-based file storage and sharing system.
-MiniDrive helps you store, share, organize, and manage your files securely — similar to Google Drive or Dropbox, but simple and efficient.
+📘 MiniDrive – Complete User Guide
 
-🌟 Key Features
-1. 🔼 File Upload
+Welcome to MiniDrive, your personal cloud storage app where you can safely upload, manage, organize, and access your files anytime.
+This guide will help you understand everything you can do inside MiniDrive in a simple and friendly way.
 
-You can upload documents, images, videos, and other file types.
+🔐 1. Getting Started
+1.1 Sign Up
 
-Files are stored securely in the cloud (via S3 storage).
+If you’re new, create an account by entering:
 
-Upload progress is shown in real-time.
+Your name
 
-Once uploaded, files appear in your dashboard instantly.
+Email
 
-How to use:
+Password
 
-Click the “Upload” button.
+Once registered, your personal storage will be created automatically.
 
-Select files from your computer.
+1.2 Login
 
-Wait for the upload to complete.
+Enter your email and password.
+After login, you will be taken to the Dashboard, where you can see all your files and options.
 
-Your uploaded files will be listed under “My Files.”
+1.3 Logout
 
-2. 📤 File Sharing
+Click the logout button to safely exit your account.
 
-Easily share your files with others.
+📁 2. Uploading Your Files
 
-Each file can generate a unique share link (shareId).
+MiniDrive allows you to upload:
 
-You can send this link to anyone you want to share with.
+Photos
 
-Only users with permission can view or download shared files.
+Videos
 
-How to use:
+PDFs
 
-Select a file → click “Share”.
+Documents
 
-Enter the email or user ID of the person you want to share with.
+Audio files
 
-A link will be created and sent securely.
+ZIP files
 
-3. 🗑️ Trash Bin (Recover or Delete Permanently)
+Any other file type
 
-MiniDrive includes a Trash Bin for safety.
-When you delete a file, it’s not removed immediately — it goes to Trash Bin.
+Just click Upload, choose your file, and it will automatically appear in your list.
 
-Why: To prevent accidental file loss.
+previews are shown for images and videos.
 
-How to use:
+📂 3. Managing Folders
 
-Go to “Trash” section in the sidebar.
+You can organize your files by creating folders and subfolders.
 
-You’ll see all deleted files here.
+With folders, you can:
 
-Choose “Restore” to recover the file.
+Create new folders
 
-Choose “Delete Permanently” to remove it forever.
+Create nested folders inside existing folders
 
-4. 🧩 File Management
+Upload files into specific folders
 
-Rename, move, or delete files.
+Open and navigate inside folders
 
-Sort files by upload date, name, or type.
+View folder contents easily
 
-Preview supported file types (like images, PDFs, etc.).
+This helps keep your files neat and organized.
 
-5. 🔒 Secure Authentication
+🗑️ 4. Deleting Files (Trash Bin)
 
-MiniDrive uses secure login and JWT authentication.
+When you delete a file or folder, it does NOT disappear permanently.
 
-Only logged-in users can upload, share, or delete files.
+It moves to the Trash Bin, where you can:
 
-Every action is tied to your user account for privacy and safety.
+Restore the file
 
-6. ⚙️ Settings
+Delete permanently
 
-Change your username or profile details.
+<!-- Deleted items stay in the trash for 30 days before they are automatically removed. -->
 
-View your storage usage.
+This protects you from accidental deletion.
 
-Manage linked accounts or connected devices.
+♻️ 5. Restoring Files
 
-7. 📄 Shared Files Section
+Inside the Trash Bin, you will see all your deleted files.
 
-See all files shared with you and by you.
+When you click Restore:
 
-You can stop sharing anytime.
+Regular files go back to the All Files section
 
-The owner always controls permissions.
+Folder files return to their original folder automatically
 
-8. 🌈 Trash Auto-Clean (optional feature)
+So you don’t need to organize them again — MiniDrive remembers where the file came from.
 
-Files in Trash can be auto-deleted after a certain time (if enabled).
+📤 6. Sharing Files
 
-💡 Tips for Best Use
+You can share files with anyone using a unique share link.
 
-Keep important files organized in folders.
+To share a file:
 
-Empty Trash regularly to save space.
+Click the share button
 
-Always double-check before deleting permanently.
+A special link will be generated
 
-Use strong passwords for account protection.
+Send the link to your friend or colleague
+
+They can open the link and view or download the file (if you allow).
+
+📥 7. Downloading Files
+
+Every file has a Download button.
+
+Clicking it will immediately start downloading the file exactly how you uploaded it.
+
+📊 8. Storage Overview
+
+MiniDrive shows how much storage you have used and how much is left.
+
+You can see:
+
+Total number of files
+
+Total number of folders
+
+Storage used
+
+Storage remaining
+
+This helps you track your space easily.
+
+⭐ 9. File Previews & Icons
+
+MiniDrive automatically shows the correct icon for:
+
+Images
+
+Videos
+
+PDFs
+
+Word/Excel files
+
+ZIP files
+
+Code files
+
+Music files
+
+Images and videos also show a preview when possible.
+
+🤖 10. MiniDrive AI Assistant (Optional Feature)
+
+MiniDrive includes a friendly AI Assistant that can help you with:
+
+Understanding how to use the app
+
+Finding files faster
+
+Explaining features
+
+Guiding you through problems
+
+Helping you organize files
+
+It acts like your personal support within the app.
+
+📌 11. Helpful Tips
+
+If you delete something by mistake — restore from Trash
+
+If your folder takes time to appear, wait a few seconds — it is being organized
+
+You can drag, navigate, and expand folders easily
+
+Use sharing links to send files securely
+
+Keep your login details safe
+
+🎉 12. Conclusion
+
+MiniDrive is a simple, clean, and powerful cloud drive made for everyone.
+
+With it, you can:
+
+Upload files
+
+Organize your content
+
+Create folders
+
+Share with others
+
+Restore deleted items
+
+Manage everything from one place
+
+Enjoy using MiniDrive — your personal, secure, and smart cloud storage!
+
+
+🎥 3. Video Features (Important)
+
+MiniDrive fully supports video uploading, previewing, and playback inside the app.
+
+✔ Video Preview
+
+When videos are uploaded:
+
+A thumbnail-style preview appears in the file grid
+
+You can see a snapshot representing the video
+
+File size and name are shown clearly
+
+✔ Video Player
+
+When you click a video:
+
+MiniDrive opens a built-in video player
+
+You can play, pause, seek, mute, and fullscreen
+
+Supported formats include:
+
+MP4
+
+MOV
+
+AVI
+
+MKV
+
+WebM
+
+And more
+
+✔ Video in Trash Bin
+
+Deleted videos also appear in the trash with:
+
+Video thumbnail
+
+File name
+
+Deleted date
+
+Days left before permanent deletion
