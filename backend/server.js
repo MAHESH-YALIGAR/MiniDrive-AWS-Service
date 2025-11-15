@@ -39,29 +39,29 @@ mongoose.connect(MONGO_URI, {
 
 
 // Runs every day at midnight
-cron.schedule("0 0 * * *", async () => {
-  console.log("Checking trash for files older than 5 days...");
+// cron.schedule("0 0 * * *", async () => {
+//   console.log("Checking trash for files older than 5 days...");
 
-  const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
+//   const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
 
-  const oldFiles = await TrashFileModel.find({
-    deletedAt: { $lte: fiveDaysAgo },
-  });
+//   const oldFiles = await TrashFileModel.find({
+//     deletedAt: { $lte: fiveDaysAgo },
+//   });
 
-  for (const file of oldFiles) {
-    try {
-      await s3.deleteObject({
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: file.trashKey,
-      }).promise();
+//   for (const file of oldFiles) {
+//     try {
+//       await s3.deleteObject({
+//         Bucket: process.env.S3_BUCKET_NAME,
+//         Key: file.trashKey,
+//       }).promise();
 
-      await file.deleteOne(); // remove from DB
-      console.log("Deleted old trash file:", file.trashKey);
-    } catch (err) {
-      console.error("Error deleting trash file:", file.trashKey, err);
-    }
-  }
-});
+//       await file.deleteOne(); // remove from DB
+//       console.log("Deleted old trash file:", file.trashKey);
+//     } catch (err) {
+//       console.error("Error deleting trash file:", file.trashKey, err);
+//     }
+//   }
+// });
 
 
 // ✅ Multer setup
@@ -77,14 +77,19 @@ app.get("/", (req, res) => {
 const userRouter = require("./router/user.routes");
 const uploadRouter = require("./router/upload.routes");
 const getfilerouter=require("./router/getfiles.routes");
-const sharerouter=require("./router/share.routes")
+const sharerouter=require("./router/share.routes");
+// const geminirouter=require("./router/gemini.routes");
+const geminiRouter = require("./router/gemini.routes");
+const folderrouter=require("./router/folderupdate.routes")
+
 // ✅ Use routes
 app.use("/api/Auth", userRouter);
 app.use("/api/file", uploadRouter);
 app.use("/api/getfiles",getfilerouter)
 // app.use("/api/share",sharerouter);
 app.use("/api/share", sharerouter);
-
+app.use("/api/gemini", geminiRouter);
+app.use("/api/uploadfolder",folderrouter)
 
 
 // ✅ Server listening

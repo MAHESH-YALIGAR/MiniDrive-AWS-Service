@@ -3,102 +3,93 @@ const s3 = require("../s3"); // Your existing S3 instance
 const { GetObjectCommand, CopyObjectCommand, DeleteObjectCommand, S3Client } = require("@aws-sdk/client-s3")
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
+
+// this for the download the file 
+
 module.exports.getfiles = async (req, res) => {
-  console.log("You are in the selectedfile controller");
+  console.log("📂 You are in getfiles controller (AWS SDK v2)");
 
   try {
-    // Get userId from authenticated user (passed by middleware)
     const userId = req.user.userId;
-
     if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "User ID not found in token",
-      });
+      return res.status(401).json({ success: false, message: "User ID not found" });
     }
 
-    // Get search criteria from query parameter
-    const criteria = req.query.criteria || '';
-
-    console.log("Searching files for user:", userId);
-    console.log("Search criteria:", criteria);
-
-    // Build the S3 prefix path for this user's uploads
+    const criteria = req.query.criteria || "";
     const prefix = `fileuploader/minidrive/${userId}/uploads`;
 
-    // Set up S3 parameters for listObjectsV2
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
       Prefix: prefix,
       MaxKeys: 100,
     };
 
-    // Use callback-based API wrapped in Promise for async/await
+    console.log("🪣 Bucket:", params.Bucket);
+    console.log("📁 Prefix:", prefix);
+
     const data = await new Promise((resolve, reject) => {
       s3.listObjectsV2(params, (err, data) => {
-        if (err) {
-          console.error("S3 Error:", err);
-          reject(err);
-        } else {
-          resolve(data);
-        }
+        if (err) reject(err);
+        else resolve(data);
       });
     });
 
-    // Filter files based on criteria (search by filename)
-    const files = (data.Contents || [])
-      .filter((obj) => {
-        // Extract filename from full S3 path
-        const fileName = obj.Key.split('/').pop().toLowerCase();
-        return fileName.includes(criteria.toLowerCase());
-      })
-      .map((obj) => ({
-        Key: obj.Key,           // Full S3 path
-        Size: obj.Size,         // File size in bytes
-        LastModified: obj.LastModified, // Last modified timestamp
-      }));
+    if (!data.Contents || data.Contents.length === 0) {
+      return res.status(200).json({
+        success: true,
+        files: [],
+        message: "No files found for this user",
+      });
+    }
 
-    console.log(`Found ${files.length} files matching criteria: "${criteria}"`);
+    // ✅ Generate signed URLs using Promise.all for reliability
+    const files = await Promise.all(
+      data.Contents
+        .filter((obj) => obj.Key.split("/").pop().toLowerCase().includes(criteria.toLowerCase()))
+        .map(async (obj) => {
+          try {
+            const fileUrl = s3.getSignedUrl("getObject", {
+              Bucket: process.env.S3_BUCKET_NAME,
+              Key: obj.Key,
+              Expires: 3600,
+            });
 
-    // Send successful response
-    return res.json({
+            return {
+              Key: obj.Key,
+              Size: obj.Size,
+              LastModified: obj.LastModified,
+              url: fileUrl, // ✅ now guaranteed to exist
+            };
+          } catch (err) {
+            console.error("❌ Error generating signed URL for:", obj.Key, err);
+            return {
+              Key: obj.Key,
+              Size: obj.Size,
+              LastModified: obj.LastModified,
+              url: null,
+            };
+          }
+        })
+    );
+
+    console.log(`✅ Successfully generated ${files.length} URLs`);
+    console.log("🧾 Sample:", files[0]);
+
+    return res.status(200).json({
       success: true,
-      files: files,
+      files,
       count: files.length,
-      criteria: criteria,
-      message: `Found ${files.length} files matching "${criteria}"`,
+      message: `Found ${files.length} files`,
     });
-
   } catch (error) {
-    console.error("Error searching files:", error);
-
-    // Handle specific S3 errors
-    if (error.code === 'NoSuchBucket') {
-      return res.status(400).json({
-        success: false,
-        message: "S3 Bucket not found",
-        error: error.message,
-      });
-    }
-
-    if (error.code === 'AccessDenied') {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied to S3 bucket",
-        error: error.message,
-      });
-    }
-
-    // Generic error response
+    console.error("❌ Error in getfiles:", error);
     return res.status(500).json({
       success: false,
-      message: "Error searching files",
+      message: "Error listing files from S3",
       error: error.message,
     });
   }
 };
-
-//this for the download the file 
 
 
 
@@ -127,53 +118,6 @@ module.exports.downloadfile = async (req, res) => {
 //this is for the trush bin 
 
 
-// module.exports.trashbin = async (req, res) => {
-//   const userId = req.user.userId;
-//   console.log("You are in the trashbin backend");
-
-//   try {
-//     const { key } = req.body; // Use req.body for POST
-//     if (!key) {
-//       return res.status(400).json({ message: "File key missing" });
-//     }
-
-//     const bucket = process.env.S3_BUCKET_NAME;
-
-//     // Old and new paths
-//     const oldPrefix = `fileuploader/minidrive/${userId}/`;
-//     const trashPrefix = `fileuploader/minidrive/${userId}/trash/`;
-//     const newKey = key.replace(oldPrefix, trashPrefix);
-
-//     // 1️⃣ Copy file to trash folder
-//     await s3.copyObject({
-//       Bucket: bucket,
-//       CopySource: `${bucket}/${key}`,
-//       Key: newKey,
-//     }).promise();
-
-//     // 2️⃣ Delete original file
-//     await s3.deleteObject({
-//       Bucket: bucket,
-//       Key: key,
-//     }).promise();
-
-//     console.log(`File moved to trash: ${key} → ${newKey}`);
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "File moved to trash successfully",
-//       oldKey: key,
-//       trashKey: newKey,
-//     });
-//   } catch (error) {
-//     console.error("Error in trashbin backend:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Error moving file to trash",
-//       error: error.message,
-//     });
-//   }
-// };
 
 
 module.exports.trashbin = async (req, res) => {
@@ -325,7 +269,7 @@ module.exports.recentlyuploadedfile = async (req, res) => {
           Expires: 3600, // 1 hour
         }),
       }));
-
+    console.log("this is ", sortedFiles.map(f => f.url))
     return res.status(200).json(sortedFiles);
   } catch (error) {
     console.log("Error in getting recently uploaded files:", error);
@@ -370,32 +314,62 @@ module.exports.deletepermently = async (req, res) => {
 
 
 
-//this for the  restorethe file in trushbin
 
 module.exports.restoreFile = async (req, res) => {
   const userId = req.user.userId;
   const { filekey } = req.body;
+
   console.log("You are in the restore file backend", filekey);
 
-  const sourceKey = filekey;
-  const destinationKey = sourceKey.replace("/trash/uploads", "/uploads/");
-  console.log("this is the destinaction key.......", destinationKey)
-  // Encode CopySource to handle spaces or special characters
-  const copySource = encodeURIComponent(`${process.env.S3_BUCKET_NAME}/${sourceKey}`);
+  if (!filekey) {
+    return res.status(400).json({ message: "Missing file key" });
+  }
+
+  const bucket = process.env.S3_BUCKET_NAME;
+
+  // 🔥 Extract filename part
+  const fileName = filekey.split("/").pop();
+
+  // 🔥 Detect if the file contains the special key "~"
+  const isFolderFile = fileName.includes("~");
+
+  let destinationKey;
+
+  if (isFolderFile) {
+    // ⭐ FOLDER FILE CASE — decode "~" → "/"  
+    const decodedPath = fileName.replace(/~/g, "/");
+
+    // 👇 Final correct folder restore path
+    destinationKey = `fileuploader/minidrive/${userId}/${decodedPath}`;
+
+  } else {
+    // ⭐ NORMAL UPLOAD FILE CASE 
+    destinationKey = filekey.replace("/trash/uploads", "/uploads");
+  }
+
+  console.log("this is the destinaction key.......", destinationKey);
 
   try {
+    // ⭐ Copy back the file to correct path
     await s3.copyObject({
-      Bucket: process.env.S3_BUCKET_NAME,
-      CopySource: copySource,
+      Bucket: bucket,
+      CopySource: `${bucket}/${filekey}`,
       Key: destinationKey,
     }).promise();
 
+    // ⭐ Remove from trash
     await s3.deleteObject({
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: sourceKey,
+      Bucket: bucket,
+      Key: filekey,
     }).promise();
 
-    res.status(200).json({ message: "File restored successfully" });
+    res.status(200).json({
+      message: isFolderFile
+        ? "Folder file restored successfully"
+        : "File restored successfully",
+      restoredTo: destinationKey
+    });
+
   } catch (error) {
     console.log("The error from restoreFile:", error);
     return res.status(500).json({ message: "Error in restoreFile" });
@@ -403,9 +377,10 @@ module.exports.restoreFile = async (req, res) => {
 };
 
 
+
 module.exports.totalstorage = async (req, res) => {
   const userId = req.user.userId;
-  const prefix = `fileuploader/minidrive/${userId}/uploads/`; // ✅ match your upload path
+  const prefix = `fileuploader/minidrive/${userId}/`; // ✅ match your upload path
 
   let totalSize = 0;
   try {
@@ -425,14 +400,14 @@ module.exports.totalstorage = async (req, res) => {
 
       if (response.Contents) {
         totalSize += response.Contents.reduce((sum, file) => sum + file.Size, 0);
-        console.log("this totalsize..................................",totalSize)
+        console.log("this totalsize..................................", totalSize)
       }
 
       continuationToken = response.IsTruncated ? response.NextContinuationToken : null;
     } while (continuationToken);
 
     const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
-    console.log("this the size in mb........",sizeInMB)
+    console.log("this the size in mb........", sizeInMB)
     res.json({
       userId,
       totalBytes: totalSize,

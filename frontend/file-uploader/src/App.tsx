@@ -9,6 +9,9 @@ import FileDisplay from "./components/pages/FileDisplay";
 import TrashBin from "./components/pages/TrashBin";
 import RecentlyUploaded from "./components/pages/RecentlyUploaded";
 import SharedWithMe from "./components/pages/SharedWithMe";
+import VideoGallery from "./components/pages/fetchVideos ";
+import AIChatBox from "./components/pages/AIChatBox";
+import FolderViewer from "./components/pages/FolderViewer"
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
 interface LayoutProps {
@@ -24,15 +27,15 @@ const AppLayout: React.FC<LayoutProps> = ({ children, color, setColor }) => {
 
   return (
     <div
-      className={`flex flex-col min-h-screen transition-colors duration-500 ${
-        isDark ? "bg-slate-950 text-white" : "bg-gray-50 text-gray-900"
-      }`}
+      className={`flex flex-col min-h-screen transition-colors duration-500 ${isDark ? "bg-slate-950 text-white" : "bg-gray-50 text-gray-900"
+        }`}
     >
       {/* Navbar */}
       <div
-        className={`sticky top-0 z-50 border-b backdrop-blur-md ${
-          isDark ? "bg-slate-900/70 border-slate-800" : "bg-white/70 border-gray-200"
-        }`}
+        className={`sticky top-0 z-50 border-b backdrop-blur-md ${isDark
+          ? "bg-slate-900/70 border-slate-800"
+          : "bg-white/70 border-gray-200"
+          }`}
       >
         <Navbar
           color={color}
@@ -49,14 +52,10 @@ const AppLayout: React.FC<LayoutProps> = ({ children, color, setColor }) => {
           <>
             <aside
               className={`fixed top-16 left-0 h-[calc(100vh-4rem)] border-r transition-all duration-300 ease-in-out z-40
-                ${
-                  sidebarOpen
-                    ? "w-64"
-                    : "w-20"
-                } ${
-                  isDark
-                    ? "bg-gradient-to-b from-slate-900 to-slate-950 border-slate-800"
-                    : "bg-gradient-to-b from-gray-100 to-white border-gray-200"
+              ${sidebarOpen ? "w-64" : "w-20"
+                } ${isDark
+                  ? "bg-gradient-to-b from-slate-900 to-slate-950 border-slate-800"
+                  : "bg-gradient-to-b from-gray-100 to-white border-gray-200"
                 }`}
             >
               <Sidebar
@@ -78,17 +77,20 @@ const AppLayout: React.FC<LayoutProps> = ({ children, color, setColor }) => {
 
         {/* Page Content */}
         <main
-          className={`flex-1 overflow-y-auto transition-all duration-300 p-6 ${
-            isLoggedIn
-              ? sidebarOpen
-                ? "lg:ml-64 ml-20"
-                : "ml-20"
-              : "ml-0"
-          }`}
+          className={`flex-1 overflow-y-auto transition-all duration-300 p-6 ${isLoggedIn
+            ? sidebarOpen
+              ? "lg:ml-64 ml-20"
+              : "ml-20"
+            : "ml-0"
+            }`}
         >
           {children}
         </main>
       </div>
+      <div> {/* ✅ AI Chat Box only after login */}
+        {isLoggedIn && <AIChatBox />}   </div>
+      {/* ✅ AI Chat Box only after login */}
+      {isLoggedIn && <AIChatBox />}
     </div>
   );
 };
@@ -110,7 +112,10 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Upload Page */}
+          {/* Authentication (no layout, no chatbox) */}
+          <Route path="/singuplogin" element={<AuthPages />} />
+
+          {/* Protected Routes */}
           <Route
             path="/upload"
             element={
@@ -120,10 +125,6 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Authentication (no layout) */}
-          <Route path="/singuplogin" element={<AuthPages />} />
-
-          {/* My Files */}
           <Route
             path="/FileDisplay"
             element={
@@ -133,7 +134,6 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Trash Bin */}
           <Route
             path="/TrashBin"
             element={
@@ -143,7 +143,6 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Recently Uploaded */}
           <Route
             path="/RecentlyUploaded"
             element={
@@ -153,7 +152,6 @@ const App: React.FC = () => {
             }
           />
 
-          {/* Shared With Me */}
           <Route
             path="/SharedWithMe"
             element={
@@ -162,6 +160,18 @@ const App: React.FC = () => {
               </AppLayout>
             }
           />
+
+          <Route
+            path="/VideoGallery"
+            element={
+              <AppLayout color={color} setColor={setColor}>
+                <VideoGallery />
+              </AppLayout>
+            }
+          />
+          <Route path="/FolderViewer" element={<AppLayout color={color} setColor={setColor}>
+            <FolderViewer/>
+          </AppLayout>}/>
         </Routes>
       </BrowserRouter>
     </AuthProvider>

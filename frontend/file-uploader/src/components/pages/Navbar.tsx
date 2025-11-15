@@ -61,7 +61,7 @@ export default function Navbar() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-extrabold bg-gradient-to-r from-cyan-700 to-blue-700 bg-clip-text text-transparent select-text">
-                     Mini Drive
+                    Mini Drive
                   </h1>
                   <p className="text-xxl text-pink-500 -mt-1 select-text">
                     Secure S3 Cloud Storage
@@ -73,8 +73,8 @@ export default function Navbar() {
               <div className="hidden sm:flex items-center space-x-8">
                 {isLoggedIn ? (
                   <>
-                    <NavLink
-                     
+                    {/* <NavLink
+                     to="/"
                       className={({ isActive }) =>
                         classNames(
                           "flex items-center gap-1 text-sm font-medium transition-colors",
@@ -87,8 +87,8 @@ export default function Navbar() {
                     >
                       <ChartBar className="w-5 h-5" />
                       Home page
-                    </NavLink>
-                    <NavLink
+                    </NavLink> */}
+                    {/* <NavLink
                       to="/FileDisplay"
                       className={({ isActive }) =>
                         classNames(
@@ -102,8 +102,8 @@ export default function Navbar() {
                     >
                       <FolderOpen className="w-5 h-5" />
                       My Files
-                    </NavLink>
-                    <NavLink
+                    </NavLink> */}
+                    {/* <NavLink
                       to="/SharedWithMe"
                       className={({ isActive }) =>
                         classNames(
@@ -117,8 +117,8 @@ export default function Navbar() {
                     >
                       <Share2 className="w-5 h-5" />
                       Shared
-                    </NavLink>
-                    <NavLink
+                    </NavLink> */}
+                    {/* <NavLink
                       to="/upload"
                       className={({ isActive }) =>
                         classNames(
@@ -132,13 +132,13 @@ export default function Navbar() {
                     >
                       <Upload className="w-5 h-5" />
                       Upload
-                    </NavLink>
+                    </NavLink> */}
                   </>
                 ) : null}
               </div>
 
               {/* User Authentication Section */}
-              <div className="flex items-center gap-4">
+              {/* <div className="flex items-center gap-4">
                 {isLoggedIn ? (
                   <Menu as="div" className="relative">
                     <MenuButton className="flex items-center gap-3 rounded-lg px-3 py-1.5 hover:bg-gray-100 transition">
@@ -193,8 +193,8 @@ export default function Navbar() {
                         </MenuItem>
                       </div>
                     </MenuItems>
-                  </Menu>
-                ) : (
+                  </Menu>*/}
+              {/* : (
                   <button
                     onClick={() => navigate("/singuplogin")}
                     className="flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-md hover:scale-105 transition-transform select-none"
@@ -203,11 +203,26 @@ export default function Navbar() {
                     <LogIn className="w-5 h-5" />
                     Sign In
                   </button>
-                )}
-              </div>
+                )} */}
+              {isLoggedIn ? (
+                <div>
+                  {/* Your logged in content here */}
+                </div>
+              ) : (
+                <button
+                  onClick={() => navigate("/singuplogin")}
+                  className="flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-md hover:scale-105 transition-transform select-none"
+                  aria-label="Sign In"
+                >
+                  <LogIn className="w-5 h-5" />
+                  Sign In
+                </button>
+              )}
+           
+              {/* </div>  */}
 
               {/* Mobile menu button */}
-              <div className="flex sm:hidden">
+              {/* <div className="flex sm:hidden">
                 <DisclosureButton
                   aria-label={open ? "Close menu" : "Open menu"}
                   className="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 transition"
@@ -218,12 +233,12 @@ export default function Navbar() {
                     <Bars3Icon className="block h-6 w-6" />
                   )}
                 </DisclosureButton>
-              </div>
+              </div> */}
             </div>
           </div>
 
           {/* Mobile menu panel */}
-          <DisclosurePanel className="sm:hidden border-t border-gray-100 bg-white">
+          {/* <DisclosurePanel className="sm:hidden border-t border-gray-100 bg-white">
             {isLoggedIn ? (
               <div className="space-y-1 px-5 pb-4 pt-3">
                 <NavLink
@@ -275,7 +290,7 @@ export default function Navbar() {
                 </button>
               </div>
             )}
-          </DisclosurePanel>
+          </DisclosurePanel> */}
         </>
       )}
     </Disclosure>

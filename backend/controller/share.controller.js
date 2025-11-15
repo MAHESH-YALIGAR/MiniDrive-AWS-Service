@@ -5,26 +5,36 @@ const { v4: uuidv4 } = require("uuid");
 const s3 = require("../s3")
 // Controller to handle sharing a file
 
+
+
 exports.shareFile = async (req, res) => {
   console.log("📩 You are in the share file controller");
 
   try {
     const { fileKey, fileName, sharedWith } = req.body;
-    const ownerId = req.user.userId; // from auth middleware
+    const ownerId = req.user.userId; 
     const owneremail = req.user.email;
+
     console.log("➡️ File info received:", fileKey, fileName, sharedWith);
 
-    // 🧩 Validate required fields
     if (!fileKey || !sharedWith) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // ✅ Safely get filename (prefer provided one, or extract from key)
     const getFileName = fileName || fileKey.split("/").pop();
 
-    const shareId = uuidv4();
+    // Check if this file is already shared with this recipient
+    const existing = await SharedFile.findOne({ fileKey, sharedWith });
 
-    // 🧠 Save shared file info to database
+    if (existing) {
+      return res.status(400).json({
+        message: `This file is already shared with ${sharedWith}`,
+        link: `${process.env.APP_URL}/s/${existing.shareId}`,
+      });
+    }
+
+    // Create a new shared file record
+    const shareId = uuidv4();
     const sharedFile = await SharedFile.create({
       fileKey,
       fileName: getFileName,
@@ -34,8 +44,6 @@ exports.shareFile = async (req, res) => {
       owneremail,
     });
 
-
-    // 🧷 Create public share link
     const link = `${process.env.APP_URL}/s/${shareId}`;
 
     console.log(`✅ File shared successfully with ${sharedWith}`);
@@ -45,14 +53,20 @@ exports.shareFile = async (req, res) => {
       link,
       sharedFile,
     });
+
   } catch (error) {
     console.error("❌ Error sharing file:", error);
+
+    // Handle duplicate share (compound index conflict)
+    if (error.code === 11000) {
+      return res.status(400).json({
+        message: `This file is already shared with ${req.body.sharedWith}`,
+      });
+    }
+
     return res.status(500).json({ message: "Failed to share file" });
   }
 };
-
-
-
 
 //this is for the getshare
 

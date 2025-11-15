@@ -166,7 +166,7 @@ const SharedWithMe: React.FC = () => {
           {sharedFiles.map((file) => (
             <li
               key={file.shareId}
-              className="flex justify-between items-center border rounded-lg p-3 hover:bg-gray-50 transition"
+              className="flex text-black justify-between items-center border rounded-lg p-3 hover:bg-gray-50 transition"
             >
               <div>
                 <p className="font-medium">{file.fileName}</p>

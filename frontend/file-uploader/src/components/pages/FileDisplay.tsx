@@ -1,9 +1,8 @@
 
-
-
-
 import axios from 'axios';
 import React, { useEffect, useState } from "react";
+const bucketName = import.meta.env.VITE_AWS_BUCKET;
+
 
 interface FileItem {
   Key: string;
@@ -28,6 +27,10 @@ const getFileIcon = (filename: string): string => {
   };
   return icons[ext] || "📁";
 };
+
+
+
+
 
 const FileManager: React.FC = () => {
   const [files, setFiles] = useState<FileItem[]>([]);
@@ -60,7 +63,7 @@ const FileManager: React.FC = () => {
 
       if (!response.ok) throw new Error("Failed to fetch files");
       const data = await response.json();
-
+      // console.log("data.url.................",file.url)
       if (data.success && data.files) {
         setFiles(data.files);
         setFilteredFiles(data.files);
@@ -182,15 +185,15 @@ const FileManager: React.FC = () => {
     }
   };
 
-const getFileName = (key: string) => {
-  const fullPath = key.split("/").pop() || key;
-  
-  // Remove UUID prefix (format: uuid-filename)
-  const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}-(.+)$/i;
-  const match = fullPath.match(uuidPattern);
-  
-  return match ? match[1] : fullPath;
-};
+  const getFileName = (key: string) => {
+    const fullPath = key.split("/").pop() || key;
+
+    // Remove UUID prefix (format: uuid-filename)
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}-(.+)$/i;
+    const match = fullPath.match(uuidPattern);
+
+    return match ? match[1] : fullPath;
+  };
   const openShareModal = (key: string) => {
     setSelectedFileForShare(key);
     setShareEmail("");
@@ -234,50 +237,8 @@ const getFileName = (key: string) => {
     setAvailableEmails([]);
   };
 
-  // const submitShare = async () => {
-  //   if (!shareEmail.trim()) {
-  //     alert("❌ Please enter an email address");
-  //     return;
-  //   }
 
-  //   if (!shareEmail.includes("@")) {
-  //     alert("❌ Please enter a valid email address");
-  //     return;
-  //   }
 
-  //   const token = localStorage.getItem("token");
-  //   setSharing(true);
-
-  //   try {
-  //     console.log("📧 Sharing file with:", shareEmail);
-  //     console.log("thi is ",selectedFileForShare,)
-  //     const res = await axios.post(
-  //       "http://localhost:8000/api/share/shareing",
-  //       { 
-  //         fileKey: selectedFileForShare, 
-  //         sharedWith: shareEmail,
-  //          fileName: getFileName,
-  //         expires: 3600 * 24 
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     console.log("✅ Share response:", res.data);
-  //     alert(`✅ File shared successfully with ${shareEmail}!`);
-  //     closeShareModal();
-
-  //   } catch (error) {
-  //     console.error("❌ Share error:", error);
-  //     alert("❌ Failed to share file. Please try again.");
-  //   } finally {
-  //     setSharing(false);
-  //   }
-  // };
   const submitShare = async () => {
     if (!shareEmail.trim()) {
       alert("❌ Please enter an email address");
@@ -376,50 +337,89 @@ const getFileName = (key: string) => {
       ) : viewMode === "list" ? (
         // List View
         <div className="space-y-2">
-          {filteredFiles.map((file) => (
-            <div
-              key={file.Key}
-              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
-            >
-              <div className="flex items-center gap-3 flex-1">
-                <span className="text-2xl">{getFileIcon(file.Key)}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-black truncate">{getFileName(file.Key)}</p>
-                  <p className="text-xs text-gray-500">
-                    {formatSize(file.Size)} • {new Date(file.LastModified).toLocaleDateString()}
-                  </p>
+
+          {[...filteredFiles]
+            // Only include images and non-video files
+            .filter((file) => {
+              const key = file.Key.toLowerCase();
+              return (
+                key.endsWith(".jpg") ||
+                key.endsWith(".jpeg") ||
+                key.endsWith(".png") ||
+                key.endsWith(".gif") ||
+                (!key.endsWith(".mp4") &&
+                  !key.endsWith(".mov") &&
+                  !key.endsWith(".mkv") &&
+                  !key.endsWith(".webm"))
+              );
+            })
+            // Sort newest first
+            .sort((a, b) => new Date(b.LastModified) - new Date(a.LastModified))
+            .map((file) => (
+              <div
+                key={file.Key}
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+              >
+                <div className="flex items-center gap-3 flex-1">
+
+                  {/* 👇 Show image preview if it's an image */}
+                  {file.Key.toLowerCase().match(/\.(jpg|jpeg|png|gif)$/) ? (
+                    <img
+                      src={file.url} // ✅ Use the full signed URL directly
+                      alt={getFileName(file.Key)}
+                      className="w-14 h-14 rounded object-cover"
+                    />
+
+                  ) : (
+                    <span className="text-2xl">{getFileIcon(file.Key)}</span>
+                  )}
+
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-black truncate">{getFileName(file.Key)}</p>
+                    <p className="text-xs text-gray-500">
+                      {formatSize(file.Size)} •{" "}
+                      {new Date(file.LastModified).toLocaleString("en-IN", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 ml-4">
+                  <button
+                    onClick={() => handleDownload(file.Key)}
+                    disabled={downloading === file.Key}
+                    className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition disabled:opacity-50"
+                    title="Download"
+                  >
+                    ⬇️
+                  </button>
+
+                  <button
+                    onClick={() => openShareModal(file.Key)}
+                    className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                    title="Share"
+                  >
+                    🔗
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(file.Key)}
+                    disabled={deleting === file.Key}
+                    className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition disabled:opacity-50"
+                    title="Delete"
+                  >
+                    {deleting === file.Key ? "⏳" : "🗑️"}
+                  </button>
                 </div>
               </div>
+            ))}
 
-              <div className="flex items-center gap-2 ml-4">
-                <button
-                  onClick={() => handleDownload(file.Key)}
-                  disabled={downloading === file.Key}
-                  className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition disabled:opacity-50"
-                  title="Download"
-                >
-                  ⬇️
-                </button>
-
-                <button
-                  onClick={() => openShareModal(file.Key)}
-                  className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-                  title="Share"
-                >
-                  🔗
-                </button>
-
-                <button
-                  onClick={() => handleDelete(file.Key)}
-                  disabled={deleting === file.Key}
-                  className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition disabled:opacity-50"
-                  title="Delete"
-                >
-                  {deleting === file.Key ? "⏳" : "🗑️"}
-                </button>
-              </div>
-            </div>
-          ))}
         </div>
       ) : (
         // Grid View
@@ -436,7 +436,7 @@ const getFileName = (key: string) => {
                 </span>
               </div>
 
-              <p className="font-medium text-sm mb-1 truncate">{getFileName(file.Key)}</p>
+              <p className="font-medium text-black text-sm mb-1 truncate">{getFileName(file.Key)}</p>
               <p className="text-xs text-gray-500 mb-3">{formatSize(file.Size)}</p>
 
               <div className="flex items-center gap-2 text-center">
