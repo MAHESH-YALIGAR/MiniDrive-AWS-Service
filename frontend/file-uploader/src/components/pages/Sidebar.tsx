@@ -62,7 +62,7 @@ export default function Sidebar({ isDark: propIsDark = true, isOpen: propIsOpen 
   });
 
   const menuItems = [
-    { icon: Cloud, label: "My Files", href: "/FileDisplay", badge: null },
+    { icon: Cloud, label: "My Files & Photos", href: "/FileDisplay", badge: null },
     { icon: Video, label: "My Videos", href: "/VideoGallery", badge: null },
     { icon: Folder, label: "My Folders", href: "/FolderViewer", badge: null },
     { icon: Share2, label: "Shared with Me", href: "/SharedWithMe", badge: null },

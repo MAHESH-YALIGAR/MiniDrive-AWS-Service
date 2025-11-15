@@ -301,7 +301,7 @@ const FileManager: React.FC = () => {
     <div className="p-6">
       {/* Header */}
       <div className="mb-6 flex justify-between items-center">
-        <h1 className="text-3xl font-bold">📁 My Files</h1>
+        <h1 className="text-3xl font-bold">📁 My Files & Photos</h1>
         <div className="flex gap-2">
           <button
             onClick={() => setViewMode("list")}
@@ -430,7 +430,18 @@ const FileManager: React.FC = () => {
               className="p-4 bg-gray-50 rounded-lg hover:shadow-lg transition border border-gray-200"
             >
               <div className="flex items-start justify-between mb-2">
-                <span className="text-3xl">{getFileIcon(file.Key)}</span>
+                {/* <span className="text-3xl">{getFileIcon(file.Key)}</span> */}
+                {/* 👇 Show image preview if it's an image */}
+                {file.Key.toLowerCase().match(/\.(jpg|jpeg|png|gif)$/) ? (
+                  <img
+                    src={file.url} // ✅ Use the full signed URL directly
+                    alt={getFileName(file.Key)}
+                    className="w-14 h-14 rounded object-cover"
+                  />
+
+                ) : (
+                  <span className="text-2xl">{getFileIcon(file.Key)}</span>
+                )}
                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                   {getFileName(file.Key).split(".").pop()?.toUpperCase()}
                 </span>

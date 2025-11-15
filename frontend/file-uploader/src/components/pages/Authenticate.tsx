@@ -112,7 +112,7 @@ export default function AuthPages() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 flex items-center justify-center p-4">
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500 opacity-20 rounded-full blur-3xl"></div>
+      <div className="absolute -top-40 -right-40 w-80 h-150 bg-emerald-500 opacity-20 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500 opacity-15 rounded-full blur-3xl"></div>
 
       <div className="relative w-full max-w-md">

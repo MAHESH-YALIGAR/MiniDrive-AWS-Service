@@ -532,7 +532,7 @@ const VideoGallery = () => {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2">
-                    <button
+                    {/* <button
                       onClick={() => {
                         // handleLike logic here
                       }}
@@ -540,7 +540,7 @@ const VideoGallery = () => {
                     >
                       <Heart size={16} fill="none" />
                       <span className="text-xs">{video.likes}</span>
-                    </button>
+                    </button> */}
 
                     <button
                       onClick={() => 
