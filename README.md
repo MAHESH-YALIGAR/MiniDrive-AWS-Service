@@ -1,7 +1,9 @@
+Mini Drive is a full-stack cloud storage application built using the MERN Stack and AWS S3. It allows users to securely upload, manage, share, restore, and permanently delete files, images, videos, and folders through an intuitive web interface.
+
+<img width="1885" height="922" alt="Screenshot 2025-11-15 222111" src="https://github.com/user-attachments/assets/02863283-c119-4f90-aec0-a1c17dd331c8" />
+
 <img width="1757" height="926" alt="Screenshot 2025-11-15 221949" src="https://github.com/user-attachments/assets/84d4ec76-59f7-4513-84c6-f87d33c0849a" />🚀 Mini Drive - Secure Cloud Storage Platform
 
-Mini Drive is a full-stack cloud storage application built using the MERN Stack and AWS S3. It allows users to securely upload, manage, share, restore, and permanently delete files, images, videos, and folders through an intuitive web interface.
-<img width="1885" height="922" alt="Screenshot 2025-11-15 222111" src="https://github.com/user-attachments/assets/02863283-c119-4f90-aec0-a1c17dd331c8" />
 📌 Features
 🔐 Authentication & Security
 User Registration and Login
