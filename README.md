@@ -70,3 +70,42 @@ JWT (JSON Web Token)
 * Dark mode interface
 * Easy navigation sidebar
 * File preview thumbnails for images
+## 🛠️ Tech Stack
+
+### Frontend
+
+* React.js
+
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Database
+
+* MongoDB
+* Mongoose
+
+### Cloud Storage
+
+* Amazon S3 (AWS S3)
+
+### Authentication & Security
+
+* JSON Web Token (JWT)
+* bcrypt.js
+
+### File Handling
+
+* Multer
+* Multer-S3
+
+### Development Tools
+
+* Git
+* GitHub
+* Visual Studio Code
+* Postman
+
+
