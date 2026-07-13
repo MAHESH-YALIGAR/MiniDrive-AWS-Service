@@ -116,7 +116,7 @@ Follow these steps to spin up both the backend and frontend components of the ap
 https://github.com/MAHESH-YALIGAR/MiniDrive-AWS-Service/tree/main/frontend
 ```
 
-### 2. Run the Backend API
+
 Open a new terminal window and navigate to the backend directory:
 ```bash
 cd backend
