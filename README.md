@@ -107,5 +107,31 @@ JWT (JSON Web Token)
 * GitHub
 * Visual Studio Code
 * Postman
+## 💻 How to Run Locally
 
+Follow these steps to spin up both the backend and frontend components of the application on your local machine:
+
+### 1. Clone the Repository
+```bash
+https://github.com/MAHESH-YALIGAR/MiniDrive-AWS-Service/tree/main/frontend
+```
+
+### 2. Run the Backend API
+Open a new terminal window and navigate to the backend directory:
+```bash
+cd backend
+# Install Node modules and dependencies
+npm init i
+# Start the frontend local development server
+npm start
+### 3. Run the Frontend Interface
+Open a second terminal window and navigate to the frontend directory:
+```bash
+cd frontend
+
+# Install Node modules and dependencies
+npm install
+
+# Start the frontend local development server
+npm run dev
 
