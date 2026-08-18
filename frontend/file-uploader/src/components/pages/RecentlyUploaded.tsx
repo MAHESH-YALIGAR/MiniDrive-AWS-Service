@@ -101,7 +101,9 @@ const RecentlyUploaded: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-6 sm:p-8">
+    // <div className="min-h-screen bg-gray-300 from-blue-50 via-white to-indigo-50 p-6 sm:p-8">
+    <div className="min-h-screen bg-blue-200 from-rose-100 via-white/70 to-red-100 p-6 sm:p-8 backdrop-blur-sm">
+
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-12">
@@ -122,7 +124,7 @@ const RecentlyUploaded: React.FC = () => {
         </div>
 
         {recentFiles.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl border-2 border-dashed border-gray-300">
+          <div className="flex flex-col items-center  justify-center py-24 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl border-2 border-dashed border-gray-300">
             <div className="text-8xl mb-6 opacity-60">📂</div>
             <p className="text-2xl font-bold text-gray-800 mb-3">No files yet</p>
             <p className="text-gray-600 text-lg">Start uploading files to see them here</p>

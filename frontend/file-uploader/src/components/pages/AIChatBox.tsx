@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { X, Send } from "lucide-react";
 
 interface ChatMessage {
@@ -48,6 +48,30 @@ const AIChatBox: React.FC = () => {
     startY_pos: 0,
     direction: "",
   });
+const [shouldBounce, setShouldBounce] = useState(false);
+
+useEffect(() => {
+  // Trigger bounce immediately on first render
+  setShouldBounce(true);
+
+  // Trigger bounce every 4 minutes (240000 ms)
+  const interval = setInterval(() => {
+    setShouldBounce(true);
+  }, 240000);
+
+  return () => clearInterval(interval);
+}, []);
+
+useEffect(() => {
+  if (shouldBounce) {
+    // Stop bounce after 1.2 seconds (default bounce duration)
+    const timer = setTimeout(() => {
+      setShouldBounce(false);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }
+}, [shouldBounce]);
 
   const [dimensions, setDimensions] = useState<Dimensions>({
     width: 420,
@@ -240,16 +264,28 @@ const AIChatBox: React.FC = () => {
     <>
       {/* Floating Button */}
       {!open && (
+        // <button
+        //   onClick={() => setOpen(true)}
+        //   aria-label="Open AI Chat"
+        //   className="fixed bottom-8 right-8 h-20 w-20 flex items-center justify-center
+        //     bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 
+        //     text-white text-3xl rounded-full shadow-xl animate-bounce 
+        //     hover:scale-110 transform transition duration-3000 z-40"
+        // >
+        //   🤖
+        // </button>
         <button
-          onClick={() => setOpen(true)}
-          aria-label="Open AI Chat"
-          className="fixed bottom-8 right-8 h-20 w-20 flex items-center justify-center
-            bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 
-            text-white text-3xl rounded-full shadow-xl animate-bounce 
-            hover:scale-110 transform transition duration-300 z-40"
-        >
-          🤖
-        </button>
+  onClick={() => setOpen(true)}
+  aria-label="Open AI Chat"
+  className={`fixed bottom-8 right-8 h-20 w-20 flex items-center justify-center
+    bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 
+    text-white text-3xl rounded-full shadow-xl
+    ${shouldBounce ? "animate-bounce" : ""}
+    hover:scale-110 transform transition duration-3000 z-40`}
+>
+  🤖
+</button>
+
       )}
 
       {/* Chat Box with Resize Handles */}
