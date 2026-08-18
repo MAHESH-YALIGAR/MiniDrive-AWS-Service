@@ -19,7 +19,7 @@ app.use(cookieParser());
 
 // ✅ CORS configuration (don’t call app.use(cors()) again below)
 app.use(cors({
-  origin: " http://localhost:5173", // ⚠️ remove trailing slash
+  origin: "https://minidrive-aws-frontend.onrender.com", // ⚠️ remove trailing slash
   credentials: true, // ✅ allow cookies from frontend
 }));
 
