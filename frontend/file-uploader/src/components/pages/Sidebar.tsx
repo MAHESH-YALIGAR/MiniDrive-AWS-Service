@@ -35,7 +35,7 @@ interface SidebarProps {
   onToggle?: () => void;
 }
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
 
 export default function Sidebar({ isDark: propIsDark = true, isOpen: propIsOpen = true, onToggle }: SidebarProps) {
   const { isLoggedIn, user, logout } = useAuth();
@@ -77,7 +77,8 @@ export default function Sidebar({ isDark: propIsDark = true, isOpen: propIsOpen 
   const handleLogout = async () => {
     logout();
     try {
-      await axios.post("http://localhost:8000/api/Auth/logout");
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      await axios.post(`${backendApi}/api/Auth/logout`);
     } catch (err) {
       console.error("Logout error:", err);
     }

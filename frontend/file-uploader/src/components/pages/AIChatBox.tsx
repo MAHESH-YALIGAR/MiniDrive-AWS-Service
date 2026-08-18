@@ -103,7 +103,8 @@ useEffect(() => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/api/gemini/rag", {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const response = await fetch(`${backendApi}/api/gemini/rag`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -58,7 +58,7 @@ const TrashBin: React.FC = () => {
   const fetchTrash = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:8000/api/getfiles/gettrust", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_API}/api/getfiles/gettrust`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -100,7 +100,7 @@ const TrashBin: React.FC = () => {
 
       console.log("📤 Sending restore request with key:", fileKey);
 
-      const res = await fetch("http://localhost:8000/api/getfiles/restorefile", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_API}/api/getfiles/restorefile`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +153,7 @@ const TrashBin: React.FC = () => {
 
       console.log("🗑️ Sending delete request with key:", fileKey);
 
-      const res = await fetch("http://localhost:8000/api/getfiles/deletepermently", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_API}/api/getfiles/deletepermently`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

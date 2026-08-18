@@ -48,7 +48,7 @@ const FileManager: React.FC = () => {
   const [emailsLoading, setEmailsLoading] = useState(false);
   const [emailSearch, setEmailSearch] = useState("");
 
-  const API_URL = "http://localhost:8000/api/getfiles/getfiles";
+  const API_URL = import.meta.env.VITE_BACKEND_API + "/api/getfiles/getfiles";
 
   const fetchFiles = async () => {
     setLoading(true);
@@ -92,7 +92,8 @@ const FileManager: React.FC = () => {
     setDownloading(key);
 
     try {
-      const res = await axios.get("http://localhost:8000/api/getfiles/download", {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const res = await axios.get(`${backendApi}/api/getfiles/download`, {
         params: { key },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -118,8 +119,9 @@ const FileManager: React.FC = () => {
     const token = localStorage.getItem("token");
 
     try {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
       const res = await axios.post(
-        "http://localhost:8000/api/presign/download-url",
+        `${backendApi}/api/presign/download-url`,
         { key, expires: 3600 * 24 },
         {
           headers: {
@@ -154,8 +156,9 @@ const FileManager: React.FC = () => {
     try {
       console.log("🗑️ Deleting file:", key);
 
+      const backendApi = import.meta.env.VITE_BACKEND_API;
       const res = await axios.post(
-        "http://localhost:8000/api/getfiles/move-to-trash",
+        `${backendApi}/api/getfiles/move-to-trash`,
         { key },
         {
           headers: {
@@ -207,7 +210,8 @@ const FileManager: React.FC = () => {
     setEmailsLoading(true);
 
     try {
-      const res = await axios.get("http://localhost:8000/api/share/getemail", {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const res = await axios.get(`${backendApi}/api/share/getemail`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -258,9 +262,9 @@ const FileManager: React.FC = () => {
       console.log("File Key:", selectedFileForShare);
 
       const fileName = getFileName(selectedFileForShare || ""); // Fixed: Call the function
-
+      const backendApi = import.meta.env.VITE_BACKEND_API;
       const res = await axios.post(
-        "http://localhost:8000/api/share/shareing",
+        `${backendApi}/api/share/shareing`,
         {
           fileKey: selectedFileForShare,
           sharedWith: shareEmail,

@@ -34,7 +34,8 @@ export default function Navbar() {
   const handleLogout = async () => {
     logout();
     try {
-      await axios.post("http://localhost:8000/api/Auth/logout");
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      await axios.post(`${backendApi}/api/Auth/logout`);
     } catch (err) {
       console.error("Logout error:", err);
     }

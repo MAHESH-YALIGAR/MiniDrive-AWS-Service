@@ -20,7 +20,8 @@ const RecentlyUploaded: React.FC = () => {
     const fetchRecentFiles = async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await axios.get("http://localhost:8000/api/getfiles/recently", {
+        const backendApi = import.meta.env.VITE_BACKEND_API;
+        const res = await axios.get(`${backendApi}/api/getfiles/recently`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setRecentFiles(res.data);

@@ -38,7 +38,7 @@ const SharedFilesPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [downloading, setDownloading] = useState<string | null>(null);
 
-  const API_BASE_URL = "http://localhost:8000";
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_API;
 
   // Fetch shared files
   const fetchSharedFiles = async () => {

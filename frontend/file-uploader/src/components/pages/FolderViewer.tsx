@@ -51,7 +51,8 @@ const FolderViewer: React.FC = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:8000/api/uploadfolder/getfolder", {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const response = await fetch(`${backendApi}/api/uploadfolder/getfolder`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -90,7 +91,8 @@ const FolderViewer: React.FC = () => {
         return;
       }
 
-      const url = `http://localhost:8000/api/uploadfolder/downloadpdf?key=${encodeURIComponent(file.key)}`;
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const url = `${backendApi}/api/uploadfolder/downloadpdf?key=${encodeURIComponent(file.key)}`;
 
       const response = await fetch(url, {
         method: "GET",
@@ -130,8 +132,9 @@ const FolderViewer: React.FC = () => {
         return;
       }
 
+      const backendApi = import.meta.env.VITE_BACKEND_API;
       const res = await axios.post(
-        "http://localhost:8000/api/uploadfolder/deletefileinfolder",
+        `${backendApi}/api/uploadfolder/deletefileinfolder`,
         { key: file.key },
         {
           headers: {

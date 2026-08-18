@@ -108,8 +108,8 @@ const UploadPage: React.FC = () => {
 
       // Determine endpoint based on uploadType
       const uploadUrl = uploadType === "folder"
-        ? "http://localhost:8000/api/uploadfolder/upload"
-        : "http://localhost:8000/api/file/upload";
+        ? `${import.meta.env.VITE_BACKEND_API}/api/uploadfolder/upload`
+        : `${import.meta.env.VITE_BACKEND_API}/api/file/upload`;
 
       // ✅ Create ONE FormData for all files
       const formData = new FormData();

@@ -43,7 +43,8 @@ const SharedWithMe: React.FC = () => {
           return;
         }
 
-        const response = await axios.get("http://localhost:8000/api/share/shared-with-me", {
+        const backendApi = import.meta.env.VITE_BACKEND_API;
+        const response = await axios.get(`${backendApi}/api/share/shared-with-me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -67,7 +68,8 @@ const SharedWithMe: React.FC = () => {
     console.log("Clearing file:", shareId);
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.delete(`http://localhost:8000/api/share/delete/${shareId}`, {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const response = await axios.delete(`${backendApi}/api/share/delete/${shareId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -86,11 +88,12 @@ const SharedWithMe: React.FC = () => {
   // ✅ Open file
   const handleOpen = async (shareId: string, fileName: string) => {
     const token = localStorage.getItem("token");
-    console.log("🔍 Calling:", `http://localhost:8000/api/share/${shareId}`);
+    console.log("🔍 Calling:", `${import.meta.env.VITE_BACKEND_API}/api/share/${shareId}`);
 
     try {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
       const res = await axios.get(
-        `http://localhost:8000/api/share/${shareId}`,
+        `${backendApi}/api/share/${shareId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -118,7 +121,8 @@ const SharedWithMe: React.FC = () => {
     try {
       console.log("Downloading file for shareId:", shareId);
 
-      const res = await axios.get(`http://localhost:8000/api/share/${shareId}`, {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const res = await axios.get(`${backendApi}/api/share/${shareId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const { url, fileName: backendFileName } = res.data;

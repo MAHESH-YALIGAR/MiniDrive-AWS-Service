@@ -278,7 +278,7 @@ const VideoGallery = () => {
   const [sharing, setSharing] = useState(false);
   const [emailSearch, setEmailSearch] = useState("");
 
-  const API_BASE = "http://localhost:8000/api";
+  const API_BASE = import.meta.env.VITE_BACKEND_API + "/api";
 
   useEffect(() => {
     fetchVideos();

@@ -37,7 +37,8 @@ export default function AuthPages() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8000/api/Auth/register', {
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const response = await axios.post(`${backendApi}/api/Auth/register`, {
         name: name,
         email: email,
         password: password
@@ -69,7 +70,8 @@ export default function AuthPages() {
   }
 
   try {
-    const response = await axios.post('http://localhost:8000/api/Auth/login', {
+    const backendApi = import.meta.env.VITE_BACKEND_API;
+    const response = await axios.post(`${backendApi}/api/Auth/login`, {
       email,
       password,
     });
